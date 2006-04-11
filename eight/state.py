@@ -19,7 +19,7 @@ class State:
 
         self.directions = ("up", "down", "left", "right")
 
-    def get_empty_position(self):
+    def _get_empty_position(self):
         i = 0
         for line in self.board:
             if 0 in line:
@@ -27,7 +27,7 @@ class State:
             i += 1
         return None
     
-    def check_range(self, position):
+    def _check_range(self, position):
         for i in position:
             if i < 0 or i >= len(self.board):
                 return False
@@ -36,7 +36,7 @@ class State:
     def move_empty(self, direction):
         if direction not in self.directions:
             raise ValueError
-        empty = self.get_empty_position()
+        empty = self._get_empty_position()
 
         moves = {
             "up":    (-1,  0),
@@ -47,7 +47,7 @@ class State:
 
         dest = map((lambda a, b: a+b), empty, moves[direction])
 
-        if not self.check_range(dest):
+        if not self._check_range(dest):
             raise ValueError
 
         self.board[empty[0]][empty[1]] = self.board[dest[0]][dest[1]]
