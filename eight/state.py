@@ -9,6 +9,8 @@ class State(object):
         [7, 8, 0]
     ]
 
+    directions = ("up", "down", "left", "right")
+
     __instances = {}
 
     def __new__(cls, board):
@@ -22,9 +24,7 @@ class State(object):
         if len(board) != len(board[0]):
             raise ValueError
         self.board = board
-
-        self.directions = ("up", "down", "left", "right")
-
+    
     def _get_empty_position(self):
         i = 0
         for line in self.board:
