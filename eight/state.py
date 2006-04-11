@@ -2,20 +2,26 @@
 
 import unittest
 
-class State:
+class State(object):
     goal = [
         [1, 2, 3],
         [4, 5, 6],
         [7, 8, 0]
     ]
 
-    def __init__(self, initial = None):
-        if initial:
-            if len(initial) != len(initial[0]):
-                raise ValueError
-            self.board = initial
-        else:
-            self.board = self.goal
+    __instances = {}
+
+    def __new__(cls, board):
+        key = cls.__key(board)
+
+        if key not in cls.__instances:
+            cls.__instances[key] = super(State, cls).__new__(cls, board)
+        return cls.__instances[key]
+
+    def __init__(self, board):
+        if len(board) != len(board[0]):
+            raise ValueError
+        self.board = board
 
         self.directions = ("up", "down", "left", "right")
 
@@ -26,6 +32,13 @@ class State:
                 return (i, line.index(0))
             i += 1
         return None
+
+    def __key(board):
+        l = []
+        [l.extend(i) for i in board]
+        l = [str(i) for i in l]
+        return ''.join(l)
+    __key = staticmethod(__key)
     
     def _check_range(self, position):
         for i in position:
@@ -95,7 +108,12 @@ class TestState(unittest.TestCase):
         self.failUnlessRaises(ValueError, state.move_empty, "down")
     
     def testunknownmove(self):
-        state = State()
+        board = [
+            [1, 2, 3],
+            [4, 5, 6],
+            [7, 8, 0]
+        ]
+        state = State(board)
         self.failUnlessRaises(ValueError, state.move_empty, "aaa")
 
 
