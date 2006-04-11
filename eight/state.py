@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import unittest
+import copy
 
 class State(object):
     goal = [
@@ -63,8 +64,12 @@ class State(object):
         if not self._check_range(dest):
             raise ValueError
 
-        self.board[empty[0]][empty[1]] = self.board[dest[0]][dest[1]]
-        self.board[dest[0]][dest[1]]   = 0
+        board = copy.deepcopy(self.board)
+
+        board[empty[0]][empty[1]] = self.board[dest[0]][dest[1]]
+        board[dest[0]][dest[1]]   = 0
+
+        return State(board)
 
     def is_goal(self):
         if self.board == self.goal:
@@ -95,8 +100,9 @@ class TestState(unittest.TestCase):
             [7, 8, 6]
         ]
         state = State(board)
-        state.move_empty("up")
-        self.failUnlessEqual(state.board, final)
+        state_moved = state.move_empty("up")
+        state_final = State(final)
+        self.failUnlessEqual(state_moved, state_final)
 
     def testillegalmove(self):
         board = [
