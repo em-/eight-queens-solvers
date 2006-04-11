@@ -3,13 +3,13 @@
 import unittest
 
 class State:
-    def __init__(self, initial = None):
-        self.goal = [
-            [1, 2, 3],
-            [4, 5, 6],
-            [7, 8, 0]
-        ]
+    goal = [
+        [1, 2, 3],
+        [4, 5, 6],
+        [7, 8, 0]
+    ]
 
+    def __init__(self, initial = None):
         if initial:
             if len(initial) != len(initial[0]):
                 raise ValueError
