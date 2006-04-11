@@ -31,6 +31,7 @@ class BreadthSolver(Solver):
                     pass
 
             successors = [s for s in successors if s not in self.CLOSED]
+            successors = [s for s in successors if s not in self.OPEN]
 
             self.OPEN += successors
 
