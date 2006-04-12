@@ -56,7 +56,7 @@ class TestSolver(unittest.TestCase):
         solution = solver.solve()
         self.failUnlessEqual(solution, goal)
     
-    def testcomplexsolution(self):
+    def testmediumsolution(self):
         goal = State(State.goal)
         board = [
             [0, 1, 2],
@@ -64,6 +64,20 @@ class TestSolver(unittest.TestCase):
             [7, 8, 6]
         ]
         initial = State(board)
+        solver = BreadthSolver(initial)
+        solution = solver.solve()
+        self.failUnlessEqual(solution, goal)
+
+    def testcomplexsolution(self):
+        goal = State(State.goal)
+        moves = ('up', 'left', 'right', 'down')
+        m = (1,1,0,0,3,2,1,2,2,1,0,1,3,2,0,3,2,0,1,3,3,0,3,2,0,0,3,3,0,3,0)
+        initial = goal
+        for i in m:
+            try:
+                initial = initial.move_empty(moves[i])
+            except ValueError:
+                pass
         solver = BreadthSolver(initial)
         solution = solver.solve()
         self.failUnlessEqual(solution, goal)
