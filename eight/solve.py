@@ -42,10 +42,12 @@ class BreadthSolver(Solver):
 
 
 
-class TestSolver(unittest.TestCase):
+class TestSolver:
+    solver_cls = Solver
+
     def testgoal(self):
         goal = State(State.goal)
-        solver = BreadthSolver(goal)
+        solver = self.solver_cls(goal)
         solution = solver.solve()
         self.failUnlessEqual(goal, solution)
 
@@ -57,7 +59,7 @@ class TestSolver(unittest.TestCase):
             [7, 0, 8]
         ]
         initial = State(board)
-        solver = BreadthSolver(initial)
+        solver = self.solver_cls(initial)
         solution = solver.solve()
         self.failUnlessEqual(solution, goal)
     
@@ -69,7 +71,7 @@ class TestSolver(unittest.TestCase):
             [7, 8, 6]
         ]
         initial = State(board)
-        solver = BreadthSolver(initial)
+        solver = self.solver_cls(initial)
         solution = solver.solve()
         self.failUnlessEqual(solution, goal)
 
@@ -83,9 +85,14 @@ class TestSolver(unittest.TestCase):
                 initial = initial.move_empty(moves[i])
             except ValueError:
                 pass
-        solver = BreadthSolver(initial)
+        solver = self.solver_cls(initial)
         solution = solver.solve()
         self.failUnlessEqual(solution, goal)
+
+
+class TestBreadthSolver(TestSolver, unittest.TestCase):
+    solver_cls = BreadthSolver
+
 
 if __name__ == '__main__':
     unittest.main()
