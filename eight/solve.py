@@ -41,6 +41,36 @@ class BreadthSolver(Solver):
             self.OPEN += successors
 
 
+class DepthSolver(Solver):
+    def __init__(self, initial_state):
+        self.OPEN = []
+        self.OPEN.append(initial_state)
+        self.CLOSED = []
+
+    def solve(self):
+        while True:
+            if not self.OPEN:
+                return None
+            n = self.OPEN.pop()
+            if n.is_goal():
+                return n
+
+            self.CLOSED.append(n)
+
+            successors = []
+            moves = ('up', 'left', 'right', 'down')
+            for move in moves:
+                try:
+                    s = n.move_empty(move)
+                    successors.append(s)
+                except ValueError:
+                    pass
+
+            successors = [s for s in successors if s not in self.CLOSED]
+            successors = [s for s in successors if s not in self.OPEN]
+
+            self.OPEN += successors
+
 
 class TestSolver:
     solver_cls = Solver
@@ -93,6 +123,8 @@ class TestSolver:
 class TestBreadthSolver(TestSolver, unittest.TestCase):
     solver_cls = BreadthSolver
 
+class TestDepthSolver(TestSolver, unittest.TestCase):
+    solver_cls = DepthSolver
 
 if __name__ == '__main__':
     unittest.main()
