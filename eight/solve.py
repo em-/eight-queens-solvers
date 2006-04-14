@@ -4,7 +4,12 @@ import unittest
 from state import State
 
 class Solver:
-    pass
+    def __init__(self, initial_state):
+        raise NotImplementedError
+
+    def solve(self):
+        raise NotImplementedError
+
 
 class BreadthSolver(Solver):
     def __init__(self, initial_state):
