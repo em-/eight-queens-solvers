@@ -2,6 +2,7 @@
 
 import unittest
 import copy
+import weakref
 
 class State(object):
     goal = [
@@ -12,13 +13,14 @@ class State(object):
 
     directions = ("up", "left", "right", "down")
 
-    __instances = {}
+    __instances = weakref.WeakValueDictionary()
 
     def __new__(cls, board):
         key = cls.__key(board)
 
         if key not in cls.__instances:
-            cls.__instances[key] = super(State, cls).__new__(cls, board)
+            inst = super(State, cls).__new__(cls, board)
+            cls.__instances[key] = inst
         return cls.__instances[key]
 
     def __init__(self, board):
