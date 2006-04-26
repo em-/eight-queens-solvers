@@ -77,6 +77,16 @@ class State(object):
         else:
             return False
 
+    def generate(self):
+        successors = []
+        for move in self.directions:
+            try:
+                s = self.move_empty(move)
+                successors.append(s)
+            except ValueError:
+                pass
+        return successors
+
 
 class TestState(unittest.TestCase):
     def testgoal(self):
@@ -122,6 +132,34 @@ class TestState(unittest.TestCase):
         state = State(board)
         self.failUnlessRaises(ValueError, state.move_empty, "aaa")
 
+    def testgenerate(self):
+        board = [
+            [1, 2, 3],
+            [4, 5, 6],
+            [7, 8, 0]
+        ]
+        start = State(board)
+       
+        successors = []
+        board = [
+            [1, 2, 3],
+            [4, 5, 6],
+            [7, 0, 8]
+        ]
+        successors.append(State(board))
+        board = [
+            [1, 2, 3],
+            [4, 5, 0],
+            [7, 8, 6]
+        ]
+        successors.append(State(board))
+
+        generated = start.generate()
+
+        generated.sort()
+        successors.sort()
+
+        self.failUnlessEqual(successors, generated)
 
 if __name__ == '__main__':
     unittest.main()
