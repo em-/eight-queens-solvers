@@ -10,7 +10,7 @@ class State(object):
         [7, 8, 0]
     ]
 
-    directions = ("up", "down", "left", "right")
+    directions = ("up", "left", "right", "down")
 
     __instances = {}
 
