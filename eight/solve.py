@@ -27,14 +27,7 @@ class BreadthSolver(Solver):
             n = self.OPEN.pop(0)
             self.CLOSED.append(n)
 
-            successors = []
-            moves = ('up', 'left', 'right', 'down')
-            for move in moves:
-                try:
-                    s = n.move_empty(move)
-                    successors.append(s)
-                except ValueError:
-                    pass
+            successors = n.generate()
 
             successors = [s for s in successors if s not in self.CLOSED]
             successors = [s for s in successors if s not in self.OPEN]
@@ -62,14 +55,7 @@ class DepthSolver(Solver):
 
             self.CLOSED.append(n)
 
-            successors = []
-            moves = ('up', 'left', 'right', 'down')
-            for move in moves:
-                try:
-                    s = n.move_empty(move)
-                    successors.append(s)
-                except ValueError:
-                    pass
+            successors = n.generate()
 
             successors = [s for s in successors if s not in self.CLOSED]
             successors = [s for s in successors if s not in self.OPEN]
