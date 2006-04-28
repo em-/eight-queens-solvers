@@ -18,13 +18,14 @@ class BreadthSolver(Solver):
         self.CLOSED = []
 
     def solve(self):
-        if self.OPEN[0].is_goal():
-            return self.OPEN[0]
-
         while True:
             if not self.OPEN:
                 return None
             n = self.OPEN.pop(0)
+
+            if n.is_goal():
+                return n
+
             self.CLOSED.append(n)
 
             successors = n.generate()
@@ -32,10 +33,6 @@ class BreadthSolver(Solver):
             successors = [s for s in successors if s not in self.CLOSED]
             successors = [s for s in successors if s not in self.OPEN]
             
-            for s in successors:
-                if s.is_goal():
-                    return s
-
             self.OPEN += successors
 
 
