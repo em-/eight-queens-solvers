@@ -10,9 +10,24 @@ class Solver:
     def solve(self):
         raise NotImplementedError
 
+class TreeSolver(Solver):
+    def __init__(self):
+        self.tree = {}
 
-class BreadthSolver(Solver):
+    def set_parent(self, child, parent):
+        self.tree[child] = parent
+
+    def get_track(self, goal):
+        track = [goal]
+        node = goal
+        while self.tree.has_key(node):
+            node = self.tree[node]
+            track.append(node)
+        return track
+
+class BreadthSolver(TreeSolver):
     def __init__(self, initial_state):
+        TreeSolver.__init__(self)
         self.OPEN = []
         self.OPEN.append(initial_state)
         self.CLOSED = []
@@ -24,7 +39,7 @@ class BreadthSolver(Solver):
             n = self.OPEN.pop(0)
 
             if n.is_goal():
-                return n
+                return self.get_track(n)
 
             self.CLOSED.append(n)
 
@@ -33,11 +48,15 @@ class BreadthSolver(Solver):
             successors = [s for s in successors if s not in self.CLOSED]
             successors = [s for s in successors if s not in self.OPEN]
             
+            for s in successors:
+                self.set_parent(s, n)
+
             self.OPEN += successors
 
 
-class DepthSolver(Solver):
+class DepthSolver(TreeSolver):
     def __init__(self, initial_state):
+        TreeSolver.__init__(self)
         self.OPEN = []
         self.OPEN.append(initial_state)
         self.CLOSED = []
@@ -48,7 +67,7 @@ class DepthSolver(Solver):
                 return None
             n = self.OPEN.pop()
             if n.is_goal():
-                return n
+                return self.get_track(n)
 
             self.CLOSED.append(n)
 
@@ -56,6 +75,9 @@ class DepthSolver(Solver):
 
             successors = [s for s in successors if s not in self.CLOSED]
             successors = [s for s in successors if s not in self.OPEN]
+
+            for s in successors:
+                self.set_parent(s, n)
 
             self.OPEN += successors
 
@@ -67,7 +89,7 @@ class TestSolver:
         goal = State(State.goal)
         solver = self.solver_cls(goal)
         solution = solver.solve()
-        self.failUnlessEqual(goal, solution)
+        self.failUnlessEqual(solution[0], goal)
 
     def testsimplesolution(self):
         goal = State(State.goal)
@@ -79,7 +101,7 @@ class TestSolver:
         initial = State(board)
         solver = self.solver_cls(initial)
         solution = solver.solve()
-        self.failUnlessEqual(solution, goal)
+        self.failUnlessEqual(solution[0], goal)
     
     def testmediumsolution(self):
         goal = State(State.goal)
@@ -91,7 +113,7 @@ class TestSolver:
         initial = State(board)
         solver = self.solver_cls(initial)
         solution = solver.solve()
-        self.failUnlessEqual(solution, goal)
+        self.failUnlessEqual(solution[0], goal)
 
     def testcomplexsolution(self):
         goal = State(State.goal)
@@ -105,7 +127,7 @@ class TestSolver:
                 pass
         solver = self.solver_cls(initial)
         solution = solver.solve()
-        self.failUnlessEqual(solution, goal)
+        self.failUnlessEqual(solution[0], goal)
 
 
 class TestBreadthSolver(TestSolver, unittest.TestCase):
