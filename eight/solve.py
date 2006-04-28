@@ -90,6 +90,7 @@ class TestSolver:
         solver = self.solver_cls(goal)
         solution = solver.solve()
         self.failUnlessEqual(solution[0], goal)
+        self.failUnlessEqual(len(solution), 1)
 
     def testsimplesolution(self):
         goal = State(State.goal)
@@ -102,6 +103,8 @@ class TestSolver:
         solver = self.solver_cls(initial)
         solution = solver.solve()
         self.failUnlessEqual(solution[0], goal)
+        self.failUnlessEqual(solution[-1], initial)
+        self.failUnlessEqual(len(solution), 2)
 
     def testmediumsolution(self):
         goal = State(State.goal)
@@ -114,6 +117,7 @@ class TestSolver:
         solver = self.solver_cls(initial)
         solution = solver.solve()
         self.failUnlessEqual(solution[0], goal)
+        self.failUnlessEqual(solution[-1], initial)
 
     def testcomplexsolution(self):
         goal = State(State.goal)
