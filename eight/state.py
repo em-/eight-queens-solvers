@@ -27,7 +27,7 @@ class State(object):
         if len(board) != len(board[0]):
             raise ValueError
         self.board = board
-    
+
     def _get_empty_position(self):
         i = 0
         for line in self.board:
@@ -42,7 +42,7 @@ class State(object):
         l = [str(i) for i in l]
         return ''.join(l)
     __key = staticmethod(__key)
-    
+
     def _check_range(self, position):
         for i in position:
             if i < 0 or i >= len(self.board):
@@ -124,7 +124,7 @@ class TestState(unittest.TestCase):
         ]
         state = State(board)
         self.failUnlessRaises(ValueError, state.move_empty, "down")
-    
+
     def testunknownmove(self):
         board = [
             [1, 2, 3],
@@ -141,7 +141,7 @@ class TestState(unittest.TestCase):
             [7, 8, 0]
         ]
         start = State(board)
-       
+
         successors = []
         board = [
             [1, 2, 3],

@@ -47,7 +47,7 @@ class BreadthSolver(TreeSolver):
 
             successors = [s for s in successors if s not in self.CLOSED]
             successors = [s for s in successors if s not in self.OPEN]
-            
+
             for s in successors:
                 self.set_parent(s, n)
 
@@ -102,7 +102,7 @@ class TestSolver:
         solver = self.solver_cls(initial)
         solution = solver.solve()
         self.failUnlessEqual(solution[0], goal)
-    
+
     def testmediumsolution(self):
         goal = State(State.goal)
         board = [
