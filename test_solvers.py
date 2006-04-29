@@ -2,7 +2,7 @@
 
 import unittest
 from solvers import BreadthSolver, DepthSolver
-from state import State
+from slot import State
 
 class TestSolver:
     solver_cls = None
