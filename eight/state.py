@@ -49,10 +49,10 @@ class State(object):
                 return False
         return True
 
-    def move_empty(self, direction):
+    def move_slot(self, direction):
         if direction not in self.directions:
             raise ValueError
-        empty = self._get_empty_position()
+        empty_slot = self._get_empty_position()
 
         moves = {
             "up":    (-1,  0),
@@ -61,14 +61,14 @@ class State(object):
             "right": ( 0, +1)
         }
 
-        dest = map((lambda a, b: a+b), empty, moves[direction])
+        dest = map((lambda a, b: a+b), empty_slot, moves[direction])
 
         if not self._check_range(dest):
             raise ValueError
 
         board = copy.deepcopy(self.board)
 
-        board[empty[0]][empty[1]] = self.board[dest[0]][dest[1]]
+        board[empty_slot[0]][empty_slot[1]] = self.board[dest[0]][dest[1]]
         board[dest[0]][dest[1]]   = 0
 
         return State(board)
@@ -83,7 +83,7 @@ class State(object):
         successors = []
         for move in self.directions:
             try:
-                s = self.move_empty(move)
+                s = self.move_slot(move)
                 successors.append(s)
             except ValueError:
                 pass
@@ -112,7 +112,7 @@ class TestState(unittest.TestCase):
             [7, 8, 6]
         ]
         state = State(board)
-        state_moved = state.move_empty("up")
+        state_moved = state.move_slot("up")
         state_final = State(final)
         self.failUnlessEqual(state_moved, state_final)
 
@@ -123,7 +123,7 @@ class TestState(unittest.TestCase):
             [7, 8, 0]
         ]
         state = State(board)
-        self.failUnlessRaises(ValueError, state.move_empty, "down")
+        self.failUnlessRaises(ValueError, state.move_slot, "down")
 
     def testunknownmove(self):
         board = [
@@ -132,7 +132,7 @@ class TestState(unittest.TestCase):
             [7, 8, 0]
         ]
         state = State(board)
-        self.failUnlessRaises(ValueError, state.move_empty, "aaa")
+        self.failUnlessRaises(ValueError, state.move_slot, "aaa")
 
     def testgenerate(self):
         board = [
