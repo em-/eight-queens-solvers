@@ -47,10 +47,16 @@ class TestSolver:
         self.failUnlessEqual(solution[-1], initial)
 
     def testcomplexsolution(self):
-        initial = State(4)
+        initial = State(6)
         solver = self.solver_cls(initial)
         solution = solver.solve()
-        self.failUnless(solution[0] in self.goals)
+        self.failUnless(solution[0].is_goal())
+
+    def testnosolution(self):
+        initial = State(3)
+        solver = self.solver_cls(initial)
+        solution = solver.solve()
+        self.failUnlessEqual(solution, None)
 
 
 class TestBreadthSolver(TestSolver, unittest.TestCase):
