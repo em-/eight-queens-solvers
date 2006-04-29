@@ -92,6 +92,17 @@ class State(object):
                 coords.pop()
         return successors
 
+    def __str__(self):
+        string = []
+        for i in range(self.size):
+            for j in range(self.size):
+                if self.rows.get(i) == j:
+                    string.append('o')
+                else:
+                    string.append(' ')
+            string.append('\n')
+        return ''.join(string)
+
 class TestState(unittest.TestCase):
     def testgoal(self):
         queens = (

@@ -89,6 +89,17 @@ class State(object):
                 pass
         return successors
 
+    def __str__ (self):
+        string = []
+        for row in self.board:
+            for item in row:
+                if item == 0:
+                    string.append(' ')
+                else:
+                    string.append(str(item))
+            string.append('\n')
+        return ''.join(string)
+
 
 class TestState(unittest.TestCase):
     def testgoal(self):
