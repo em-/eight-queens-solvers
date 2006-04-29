@@ -18,6 +18,8 @@ class State(object):
     def __init__(self, size, coords=None):
         self.rows = {}
         self.size = size
+        if not coords:
+            coords = ()
         if not self._check_valid(coords):
             raise ValueError
         for i,j in coords:
