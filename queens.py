@@ -2,18 +2,24 @@
 
 import unittest
 import copy
-import weakref
+import memoize
+
+def _keyfunc(args, kwds):
+    size = args[0]
+
+    if len(args) == 2:
+        coords = args[1]
+    else:
+        coords = kwds.get('coords', ())
+
+    coords = list(coords)
+    coords.sort()
+
+    return str(size)+str(coords)
+
 
 class State(object):
-    __instances = weakref.WeakValueDictionary()
-
-    def __new__(cls, size, coords=None):
-        key = cls.__key(size, coords)
-
-        if key not in cls.__instances:
-            inst = super(State, cls).__new__(cls, size, coords)
-            cls.__instances[key] = inst
-        return cls.__instances[key]
+    __metaclass__ = memoize.Memoized(_keyfunc)
 
     def __init__(self, size, coords=None):
         self.rows = {}
@@ -24,18 +30,6 @@ class State(object):
             raise ValueError
         for i,j in coords:
             self.rows[i] = j
-
-    def __key(size, coords):
-        if coords:
-            coords = list(coords)
-        else:
-            coords = []
-        coords.sort()
-        l = []
-        [l.extend(i) for i in coords]
-        l = [str(i) for i in l]
-        return str(size)+''.join(l)
-    __key = staticmethod(__key)
 
     def _check_valid(self, coords):
         rows = [i for i,j in coords]

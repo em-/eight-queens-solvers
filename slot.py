@@ -6,7 +6,7 @@ import memoize
 
 
 class State(object):
-    __metaclass__ = memoize.Memoized
+    __metaclass__ = memoize.Memoized()
 
     goal = [
         [1, 2, 3],
