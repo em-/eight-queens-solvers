@@ -2,26 +2,11 @@
 
 import unittest
 import copy
-import weakref
-
-class Memoized(type):
-    # this is the MultiSingleton metaclass 
-    # with a WeakValueDictionary instead of a simple dict
-    def __call__(cls, *args, **kwds):
-        cache = cls.__dict__.get('__cache__')
-        if cache is None:
-            cls.__cache__ = cache = weakref.WeakValueDictionary()
-        tag = str(args) + str(kwds)
-        if tag in cache:
-            return cache[tag]
-        obj = object.__new__(cls)
-        obj.__init__(*args, **kwds)
-        cache[tag] = obj
-        return obj
+import memoize
 
 
 class State(object):
-    __metaclass__ = Memoized
+    __metaclass__ = memoize.Memoized
 
     goal = [
         [1, 2, 3],
