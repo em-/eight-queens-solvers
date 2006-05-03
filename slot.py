@@ -4,7 +4,25 @@ import unittest
 import copy
 import weakref
 
+class Memoized(type):
+    # this is the MultiSingleton metaclass 
+    # with a WeakValueDictionary instead of a simple dict
+    def __call__(cls, *args, **kwds):
+        cache = cls.__dict__.get('__cache__')
+        if cache is None:
+            cls.__cache__ = cache = weakref.WeakValueDictionary()
+        tag = str(args) + str(kwds)
+        if tag in cache:
+            return cache[tag]
+        obj = object.__new__(cls)
+        obj.__init__(*args, **kwds)
+        cache[tag] = obj
+        return obj
+
+
 class State(object):
+    __metaclass__ = Memoized
+
     goal = [
         [1, 2, 3],
         [4, 5, 6],
@@ -12,16 +30,6 @@ class State(object):
     ]
 
     directions = ("up", "left", "right", "down")
-
-    __instances = weakref.WeakValueDictionary()
-
-    def __new__(cls, board):
-        key = cls.__key(board)
-
-        if key not in cls.__instances:
-            inst = super(State, cls).__new__(cls, board)
-            cls.__instances[key] = inst
-        return cls.__instances[key]
 
     def __init__(self, board):
         if len(board) != len(board[0]):
@@ -35,13 +43,6 @@ class State(object):
                 return (i, line.index(0))
             i += 1
         return None
-
-    def __key(board):
-        l = []
-        [l.extend(i) for i in board]
-        l = [str(i) for i in l]
-        return ''.join(l)
-    __key = staticmethod(__key)
 
     def _check_range(self, position):
         for i in position:
