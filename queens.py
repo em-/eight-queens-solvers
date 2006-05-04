@@ -4,13 +4,9 @@ import unittest
 import copy
 import memoize
 
-def _keyfunc(args, kwds):
-    size = args[0]
-
-    if len(args) == 2:
-        coords = args[1]
-    else:
-        coords = kwds.get('coords', ())
+def _keyfunc(size, coords=None):
+    if not coords:
+        coords = ()
 
     coords = list(coords)
     coords.sort()

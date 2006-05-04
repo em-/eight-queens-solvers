@@ -5,7 +5,7 @@ import weakref
 
 def Memoized(keyfunc=None):
     if not keyfunc:
-        keyfunc = lambda args, kwds: str(args) + str(kwds)
+        keyfunc = lambda *args, **kwds: str(args) + str(kwds)
 
     class MemoizedMeta(type):
         # this is the MultiSingleton metaclass 
@@ -14,7 +14,7 @@ def Memoized(keyfunc=None):
             cache = cls.__dict__.get('__cache__')
             if cache is None:
                 cls.__cache__ = cache = weakref.WeakValueDictionary()
-            tag = keyfunc(args, kwds)
+            tag = keyfunc(*args, **kwds)
             if tag in cache:
                 return cache[tag]
             obj = object.__new__(cls)
@@ -58,7 +58,7 @@ class TestMemoized(unittest.TestCase):
 
     def test_singleton(self):
         class Test:
-            __metaclass__ = Memoized(lambda args, kwds: 'a')
+            __metaclass__ = Memoized(lambda arg: 'a')
             pass
 
         a = Test('a')
