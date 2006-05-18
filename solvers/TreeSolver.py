@@ -5,21 +5,19 @@ import graph
 
 class TreeSolver(Solver):
     def __init__(self):
-        self.tree = graph.Graph()
+        self.tree = graph.DiGraph()
 
     def set_parent(self, child, parent):
-        try: 
-            self.tree.add_node(parent)
-            self.tree.add_node(child)
-        except ValueError:
-            pass
+        self.tree.add_node(parent)
+        self.tree.add_node(child)
         self.tree.add_edge(child, parent)
-
 
     def get_track(self, goal):
         track = [goal]
         while True:
-            parents = [e.end for e in self.tree.edges if e.start == track[-1]]
-            if not parents: 
+            tail = track[-1]
+            edges = self.tree.edges(tail)
+            if not edges:
                 return track
-            track.append(parents[0])
+            track.append(edges[0][1])
+

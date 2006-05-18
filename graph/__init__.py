@@ -1,7 +1,10 @@
-"""Problem Solvers"""
+import sys
+import os
 
-__author__ = 'Emanuele Aina <emanuele.aina@gmail.com>'
-__license__ = 'MIT'
+path, file = os.path.split(__file__)
 
-from Graph import Graph, Edge
+sys.path.append(os.path.join(path, 'networkx-0.29-py2.4.egg'))
 
+from networkx import *
+
+sys.path.pop()
