@@ -27,6 +27,7 @@ class TestSolver:
         goal = State(4, queens)
         solver = self.solver_cls(goal)
         solution = solver.solve()
+        self.failUnlessEqual(len(solution), 1)
         self.failUnlessEqual(solution[0], goal)
 
     def testsimplesolution(self):
@@ -35,9 +36,9 @@ class TestSolver:
         initial = State(4, queens[:-1])
         solver = self.solver_cls(initial)
         solution = solver.solve()
+        self.failUnlessEqual(len(solution), 2)
         self.failUnlessEqual(solution[0], goal)
         self.failUnlessEqual(solution[-1], initial)
-        self.failUnlessEqual(len(solution), 2)
 
     def testmediumsolution(self):
         initial = State(4)
