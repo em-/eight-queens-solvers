@@ -8,4 +8,4 @@ from Solver import Solver
 from TreeSolver import TreeSolver
 from BreadthSolver import BreadthSolver
 from DepthSolver import DepthSolver
-
+from PruningBreadthSolver import PruningBreadthSolver

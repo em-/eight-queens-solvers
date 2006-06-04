@@ -75,6 +75,17 @@ class State(object):
                 pass
         return successors
 
+    def heuristics(self):
+        h = i = 0
+        while i < len(self.board):
+            j = 0
+            while j < len(self.board[i]):
+                if self.board[i][j] != self.goal[i][j]:
+                    h += 1
+                j += 1
+            i += 1
+        return h
+
     def __str__ (self):
         string = []
         for row in self.board:
@@ -96,6 +107,7 @@ class TestState(unittest.TestCase):
         ]
         state = State(board)
         self.failUnless(state.is_goal())
+        self.failUnlessEqual(state.heuristics(), 0)
 
     def testmove(self):
         board = [
@@ -112,6 +124,7 @@ class TestState(unittest.TestCase):
         state_moved = state._move_slot("up")
         state_final = State(final)
         self.failUnlessEqual(state_moved, state_final)
+        self.failUnlessEqual(state_moved.heuristics(), 2)
 
     def testillegalmove(self):
         board = [
