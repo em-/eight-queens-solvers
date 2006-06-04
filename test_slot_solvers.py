@@ -48,7 +48,7 @@ class TestSolver:
         initial = goal
         for i in m:
             try:
-                initial = initial.move_slot(moves[i])
+                initial = initial._move_slot(moves[i])
             except ValueError:
                 pass
         solver = self.solver_cls(initial)

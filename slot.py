@@ -35,7 +35,7 @@ class State(object):
                 return False
         return True
 
-    def move_slot(self, direction):
+    def _move_slot(self, direction):
         if direction not in self.directions:
             raise ValueError
         empty_slot = self._get_empty_position()
@@ -69,7 +69,7 @@ class State(object):
         successors = []
         for move in self.directions:
             try:
-                s = self.move_slot(move)
+                s = self._move_slot(move)
                 successors.append(s)
             except ValueError:
                 pass
@@ -109,7 +109,7 @@ class TestState(unittest.TestCase):
             [7, 8, 6]
         ]
         state = State(board)
-        state_moved = state.move_slot("up")
+        state_moved = state._move_slot("up")
         state_final = State(final)
         self.failUnlessEqual(state_moved, state_final)
 
@@ -120,7 +120,7 @@ class TestState(unittest.TestCase):
             [7, 8, 0]
         ]
         state = State(board)
-        self.failUnlessRaises(ValueError, state.move_slot, "down")
+        self.failUnlessRaises(ValueError, state._move_slot, "down")
 
     def testunknownmove(self):
         board = [
@@ -129,7 +129,7 @@ class TestState(unittest.TestCase):
             [7, 8, 0]
         ]
         state = State(board)
-        self.failUnlessRaises(ValueError, state.move_slot, "aaa")
+        self.failUnlessRaises(ValueError, state._move_slot, "aaa")
 
     def testgenerate(self):
         board = [
