@@ -3,7 +3,7 @@
 from solvers import TreeSolver
 
 class PruningBreadthSolver(TreeSolver):
-    def __init__(self, initial_state, beta=3):
+    def __init__(self, initial_state, beta):
         TreeSolver.__init__(self)
         self.beta = beta
         self.OPEN = []
