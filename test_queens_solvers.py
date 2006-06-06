@@ -5,7 +5,9 @@ from solvers import BreadthSolver, DepthSolver
 from queens import State
 
 class TestSolver:
-    solver_cls = None
+    def solver(self, initial_state):
+        raise NotImplementedError
+
     queens = [
     (
         (0,1),
@@ -25,7 +27,7 @@ class TestSolver:
     def testgoal(self):
         queens = self.queens[0]
         goal = State(4, queens)
-        solver = self.solver_cls(goal)
+        solver = self.solver(goal)
         solution = solver.solve()
         self.failUnlessEqual(len(solution), 1)
         self.failUnlessEqual(solution[0], goal)
@@ -34,7 +36,7 @@ class TestSolver:
         queens = self.queens[0]
         goal = State(4, queens)
         initial = State(4, queens[:-1])
-        solver = self.solver_cls(initial)
+        solver = self.solver(initial)
         solution = solver.solve()
         self.failUnlessEqual(len(solution), 2)
         self.failUnlessEqual(solution[0], goal)
@@ -42,29 +44,31 @@ class TestSolver:
 
     def testmediumsolution(self):
         initial = State(4)
-        solver = self.solver_cls(initial)
+        solver = self.solver(initial)
         solution = solver.solve()
         self.failUnless(solution[0] in self.goals)
         self.failUnlessEqual(solution[-1], initial)
 
     def testcomplexsolution(self):
         initial = State(6)
-        solver = self.solver_cls(initial)
+        solver = self.solver(initial)
         solution = solver.solve()
         self.failUnless(solution[0].is_goal())
 
     def testnosolution(self):
         initial = State(3)
-        solver = self.solver_cls(initial)
+        solver = self.solver(initial)
         solution = solver.solve()
         self.failUnlessEqual(solution, None)
 
 
 class TestBreadthSolver(TestSolver, unittest.TestCase):
-    solver_cls = BreadthSolver
+    def solver(self, initial_state):
+        return BreadthSolver(initial_state)
 
 class TestDepthSolver(TestSolver, unittest.TestCase):
-    solver_cls = DepthSolver
+    def solver(self, initial_state):
+        return DepthSolver(initial_state)
 
 if __name__ == '__main__':
     unittest.main()
