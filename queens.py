@@ -4,18 +4,9 @@ import unittest
 import copy
 import memoize
 
-def _keyfunc(size, coords=None):
-    if not coords:
-        coords = ()
-
-    coords = list(coords)
-    coords.sort()
-
-    return str(size)+str(coords)
-
 
 class State(object):
-    __metaclass__ = memoize.Memoized(_keyfunc)
+    __metaclass__ = memoize.Memoized
 
     def __init__(self, size, coords=None):
         self.rows = {}
@@ -26,6 +17,9 @@ class State(object):
             raise ValueError
         for i,j in coords:
             self.rows[i] = j
+
+    def __hash__(self):
+        return hash(self.size) + hash(str(self.rows))
 
     def _check_valid(self, coords):
         rows = [i for i,j in coords]

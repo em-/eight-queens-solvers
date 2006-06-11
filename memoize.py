@@ -3,33 +3,32 @@
 import unittest
 import weakref
 
-def Memoized(keyfunc=None):
-    if not keyfunc:
-        keyfunc = lambda *args, **kwds: str(args) + str(kwds)
+class Memoized(type):
+    # this is the MultiSingleton metaclass 
+    # with a WeakValueDictionary instead of a simple dict
+    def __call__(cls, *args, **kwds):
+        cache = cls.__dict__.get('__cache__')
+        if cache is None:
+            cls.__cache__ = cache = weakref.WeakValueDictionary()
+        
+        obj = object.__new__(cls)
+        obj.__init__(*args, **kwds)
 
-    class MemoizedMeta(type):
-        # this is the MultiSingleton metaclass 
-        # with a WeakValueDictionary instead of a simple dict
-        def __call__(cls, *args, **kwds):
-            cache = cls.__dict__.get('__cache__')
-            if cache is None:
-                cls.__cache__ = cache = weakref.WeakValueDictionary()
-            tag = keyfunc(*args, **kwds)
-            if tag in cache:
-                return cache[tag]
-            obj = object.__new__(cls)
-            obj.__init__(*args, **kwds)
-            cache[tag] = obj
-            return obj
-    return MemoizedMeta
-     
+        tag = hash(obj)
+        if tag in cache:
+            return cache[tag]
+
+        cache[tag] = obj
+        return obj
 
 
 class TestMemoized(unittest.TestCase):
     def test_noargs(self):
         class Test:
-            __metaclass__ = Memoized()
-            pass
+            __metaclass__ = Memoized
+
+            def __hash__(self):
+                return hash(Test)
 
         a = Test()
         b = Test()
@@ -38,8 +37,13 @@ class TestMemoized(unittest.TestCase):
 
     def test_args_equal(self):
         class Test:
-            __metaclass__ = Memoized()
-            pass
+            __metaclass__ = Memoized
+
+            def __init__(self, value):
+                self.value = value
+
+            def __hash__(self):
+                return hash(self.value)
 
         a = Test('a')
         b = Test('a')
@@ -48,8 +52,13 @@ class TestMemoized(unittest.TestCase):
 
     def test_args_differ(self):
         class Test:
-            __metaclass__ = Memoized()
-            pass
+            __metaclass__ = Memoized
+
+            def __init__(self, value):
+                self.value = value
+
+            def __hash__(self):
+                return hash(self.value)
 
         a = Test('a')
         b = Test('b')
@@ -58,8 +67,13 @@ class TestMemoized(unittest.TestCase):
 
     def test_singleton(self):
         class Test:
-            __metaclass__ = Memoized(lambda arg: 'a')
-            pass
+            __metaclass__ = Memoized
+
+            def __init__(self, value):
+                self.value = value
+
+            def __hash__(self):
+                return hash(Test)
 
         a = Test('a')
         b = Test('b')

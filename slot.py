@@ -7,7 +7,7 @@ import sets
 
 
 class State(object):
-    __metaclass__ = memoize.Memoized()
+    __metaclass__ = memoize.Memoized
 
     goal = [
         [1, 2, 3],
@@ -21,6 +21,9 @@ class State(object):
         if len(board) != len(board[0]):
             raise ValueError
         self.board = board
+    
+    def __hash__(self):
+        return hash(str(self.board))
 
     def _get_empty_position(self):
         i = 0
