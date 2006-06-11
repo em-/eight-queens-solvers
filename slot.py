@@ -3,6 +3,7 @@
 import unittest
 import copy
 import memoize
+import sets
 
 
 class State(object):
@@ -168,8 +169,8 @@ class TestState(unittest.TestCase):
 
         generated = start.generate()
 
-        generated.sort()
-        successors.sort()
+        generated = sets.Set(generated)
+        successors = sets.Set(successors)
 
         self.failUnlessEqual(successors, generated)
 
