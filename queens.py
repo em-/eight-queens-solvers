@@ -95,7 +95,7 @@ class State(object):
                 if i+j not in diags_b:
                     free += 1
 
-        return (self.size**2)*4-free
+        return ((self.size**2)*4 - free) - 4 * self.size * len(self.rows)
 
     def __str__(self):
         string = []
