@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import unittest
-from solvers import BreadthSolver, DepthSolver, PruningBreadthSolver
+from solvers import BreadthSolver, DepthSolver, HillClimbingSolver, PruningBreadthSolver
 from slot import State
 
 class TestSolver:
@@ -64,6 +64,10 @@ class TestBreadthSolver(TestSolver, unittest.TestCase):
 class TestDepthSolver(TestSolver, unittest.TestCase):
     def solver(self, initial_state):
         return DepthSolver(initial_state)
+
+class TestHillClimbingSolver(TestSolver, unittest.TestCase):
+    def solver(self, initial_state):
+        return HillClimbingSolver(initial_state)
 
 class TestPruningBreadthSolver(TestSolver, unittest.TestCase):
     def solver(self, initial_state):
