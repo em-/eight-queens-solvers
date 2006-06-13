@@ -85,7 +85,7 @@ class State(object):
             j = 0
             while j < len(self.board[i]):
                 if self.board[i][j] != self.goal[i][j]:
-                    h += 1
+                    h += 2 * len(self.board) - (i+j)
                 j += 1
             i += 1
         return h
