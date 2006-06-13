@@ -1,7 +1,7 @@
-#!/usr/bin/env python
+#!/usr/bin/python2.3
 
 import unittest
-from solvers import BreadthSolver, DepthSolver, HillClimbingSolver, PruningBreadthSolver
+from solvers import BreadthSolver, DepthSolver, HillClimbingSolver, PruningBreadthSolver, AStarSolver
 from slot import State
 
 class TestSolver:
@@ -74,6 +74,10 @@ class TestPruningBreadthSolver(TestSolver, unittest.TestCase):
         # Prune only one of 4 generated states (up, down, left, right)
         # More aggressive pruning didn't give a solution in the complex case
         return PruningBreadthSolver(initial_state, 3)
+
+class TestAStarSolver(TestSolver, unittest.TestCase):
+    def solver(self, initial_state):
+        return AStarSolver(initial_state)
 
 if __name__ == '__main__':
     unittest.main()

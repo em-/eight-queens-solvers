@@ -1,7 +1,7 @@
-#!/usr/bin/env python
+#!/usr/bin/python2.3
 
 import unittest
-from solvers import BreadthSolver, DepthSolver, HillClimbingSolver, PruningBreadthSolver
+from solvers import BreadthSolver, DepthSolver, HillClimbingSolver, PruningBreadthSolver, AStarSolver
 from queens import State
 
 class TestSolver:
@@ -77,6 +77,10 @@ class TestHillClimbingSolver(TestSolver, unittest.TestCase):
 class TestPruningBreadthSolver(TestSolver, unittest.TestCase):
     def solver(self, initial_state):
         return PruningBreadthSolver(initial_state, 40)
+
+class TestAStarSolver(TestSolver, unittest.TestCase):
+    def solver(self, initial_state):
+        return AStarSolver(initial_state)
 
 if __name__ == '__main__':
     unittest.main()

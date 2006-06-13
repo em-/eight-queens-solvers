@@ -10,3 +10,4 @@ from BreadthSolver import BreadthSolver
 from DepthSolver import DepthSolver
 from HillClimbingSolver import HillClimbingSolver
 from PruningBreadthSolver import PruningBreadthSolver
+from AStarSolver import AStarSolver
