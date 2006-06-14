@@ -29,7 +29,7 @@ class Statistics:
         else:
             print "Solution not found"
         print "Nodes analyzed: %s" % self.analyzed_nodes
-        print "Nodes in memory: %s" % self.generated_nodes
+        print "Nodes in memory: %s" % self.inmemory_nodes
         print
 
     def breadth(self, initial_state):
