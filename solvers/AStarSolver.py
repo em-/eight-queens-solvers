@@ -2,31 +2,38 @@
 
 from solvers import TreeSolver
 
-class SortedList(list):
-    def insort(self, item, key=None):
-        iter = enumerate(self)
+import bisect
 
-        if not key:
-            key = lambda x: x
+class PQueue(list):
+    def __init__(self, *args, **kwds):
+        list.__init__(self, *args, **kwds)
+        self.counter = 0
+    
+    def add(self, item, key=None):
+        # The counter is needed to keep the sorting stable
+        if key:
+            t = (key(item), self.counter, item)
+        else:
+            t = (item, self.counter, item)
+        self.counter += 1
+        bisect.insort(self, t)
 
-        try:
-            index, value = iter.next()
-            while key(value) < key(item):
-                index, value = iter.next()
-        except StopIteration:
-            index = len(self)
+    def pop(self):
+        i = list.pop(self, 0)
+        return i[2]
 
-        self.insert(index, item)
+    def peek(self):
+        return self[0][2]
 
 class AStarSolver(TreeSolver):
     def __init__(self, initial_state):
         TreeSolver.__init__(self)
-        self.OPEN = SortedList()
+        self.OPEN = PQueue()
         self.CLOSED = []
         self.G = {}
 
         self.G[initial_state] = 0
-        self.OPEN.append(initial_state)
+        self.OPEN.add(initial_state, key=lambda x: 0)
 
     def solve(self):
         while True:
@@ -36,7 +43,7 @@ class AStarSolver(TreeSolver):
             def f(node):
                 return self.G[node] + node.heuristics()
 
-            n = self.OPEN.pop(0)
+            n = self.OPEN.pop()
 
             if n.is_goal():
                 return self.get_track(n)
@@ -52,5 +59,5 @@ class AStarSolver(TreeSolver):
                 self.set_parent(s, n)
                 # FIXME: use a true distance graph, instead of using "1"
                 self.G[s] = self.G[n] + 1
-                self.OPEN.insort(s, key=f)
+                self.OPEN.add(s, key=f)
 
