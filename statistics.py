@@ -79,8 +79,11 @@ class Queens(Statistics):
         self.print_stat()
         self.astar (initial_state)
         self.print_stat()
-        self.pruningbreadth (initial_state, 40)
+        self.pruningbreadth (initial_state, 300)
         self.print_stat()
+        for i in xrange(40, 34, -1):
+            self.pruningbreadth (initial_state, i)
+            self.print_stat()
 
 class Slot(Statistics):
     def start(self):
@@ -99,6 +102,8 @@ class Slot(Statistics):
         self.astar (initial_state)
         self.print_stat()
         self.pruningbreadth (initial_state, 3)
+        self.print_stat()
+        self.pruningbreadth (initial_state, 2)
         self.print_stat()
 
 def main():
