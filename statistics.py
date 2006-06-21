@@ -61,7 +61,7 @@ class Statistics:
         self.inmemory_nodes = len(solver.CLOSED) + len(solver.OPEN)
 
     def pruningbreadth(self, initial_state, beta):
-        self.algorithm = "Pruning Breadth First"
+        self.algorithm = "Pruning Breadth First (beta = %d)" % beta
         solver = PruningBreadthSolver(initial_state, beta)
         self.run(solver.solve)
         self.analyzed_nodes = len(solver.CLOSED)
