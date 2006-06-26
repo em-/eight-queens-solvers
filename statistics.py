@@ -25,7 +25,7 @@ class Statistics:
 
     def print_stat(self):
         print "Algorithm: %s" % self.algorithm
-        print "Time: %s ms" % (self.time/1000.0)
+        print "Time: %s s" % (self.time/1000.0)
         if self.solution:
             print "Solution found"
         else:
