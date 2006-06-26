@@ -69,7 +69,7 @@ class State(object):
             for j in range(self.size):
                 coords.append((i,j))
                 try:
-                    s = State(self.size, coords)
+                    s = self.__class__(self.size, coords)
                     successors.append(s)
                 except ValueError:
                     pass

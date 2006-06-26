@@ -61,7 +61,7 @@ class State(object):
         board[empty_slot[0]][empty_slot[1]] = self.board[dest[0]][dest[1]]
         board[dest[0]][dest[1]]   = 0
 
-        return State(board)
+        return self.__class__(board)
 
     def is_goal(self):
         if self.board == self.goal:
