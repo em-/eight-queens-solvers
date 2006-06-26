@@ -2,7 +2,9 @@
 
 from solvers import BreadthSolver, DepthSolver, HillClimbingSolver, PruningBreadthSolver, AStarSolver
 import slot
+import slot_dumb
 import queens
+import queens_dumb
 
 import timing
 
@@ -85,6 +87,19 @@ class Queens(Statistics):
             self.pruningbreadth (initial_state, i)
             self.print_stat()
 
+class QueensDumb(Statistics):
+    def start(self):
+        initial_state = queens_dumb.State(6)
+        self.hillclimbing (initial_state)
+        self.print_stat()
+        self.astar (initial_state)
+        self.print_stat()
+        self.pruningbreadth (initial_state, 350)
+        self.print_stat()
+        for i in xrange(40, 34, -1):
+            self.pruningbreadth (initial_state, i)
+            self.print_stat()
+
 class Slot(Statistics):
     def start(self):
         board = [
@@ -106,15 +121,42 @@ class Slot(Statistics):
         self.pruningbreadth (initial_state, 2)
         self.print_stat()
 
+class SlotDumb(Statistics):
+    def start(self):
+        board = [
+            [5, 6, 1],
+            [2, 7, 0],
+            [4, 8, 3]
+        ]
+        initial_state = slot_dumb.State(board)
+        self.hillclimbing (initial_state)
+        self.print_stat()
+        self.astar (initial_state)
+        self.print_stat()
+        self.pruningbreadth (initial_state, 3)
+        self.print_stat()
+        self.pruningbreadth (initial_state, 2)
+        self.print_stat()
+
 def main():
     print 'Slot'
     print
     a = Slot()
     a.start()
     print '---------'
+    print 'SlotDumb'
+    print
+    a = SlotDumb()
+    a.start()
+    print '---------'
     print 'Queens'
     print
     b = Queens()
+    b.start()
+    print '---------'
+    print 'QueensDumb'
+    print
+    b = QueensDumb()
     b.start()
 
 if __name__ == '__main__':
