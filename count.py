@@ -9,7 +9,8 @@ def count(initial):
 
     while True:
         if not OPEN:
-            return len(CLOSED)
+            goals = [i for i in CLOSED if i.is_goal()]
+            return (len(CLOSED), len(goals))
 
         n = OPEN.pop()
 
@@ -22,8 +23,10 @@ def count(initial):
 
 s = slot.State(slot.State.goal)
 
-print "Slot: %d" % count(s)
+c = count(s)
+print "Slot: %d (goals: %d)" % c
 
 for i in xrange(8):
     q = queens.State(i)
-    print "Queens(%d): %d" % (i, count(q))
+    c = count(q)
+    print "Queens(%d): %d (goals: %d)" % ((i, ) + c)
