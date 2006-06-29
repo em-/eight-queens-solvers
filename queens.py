@@ -51,7 +51,7 @@ class State(object):
 
         empty_rows = [i for i in range(self.size) if i not in self.rows]
         empty_cols = [i for i in range(self.size) if i not in self.cols]
-        
+
         for i in empty_rows:
             for j in empty_cols:
                 try:

@@ -8,7 +8,7 @@ class PQueue(list):
     def __init__(self, *args, **kwds):
         list.__init__(self, *args, **kwds)
         self.counter = 0
-    
+
     def add(self, item, key=None):
         # The counter is needed to keep the sorting stable
         if key:

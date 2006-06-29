@@ -21,7 +21,7 @@ class State(object):
         if len(board) != len(board[0]):
             raise ValueError
         self.board = board
-    
+
     def __hash__(self):
         return hash(str(self.board))
 

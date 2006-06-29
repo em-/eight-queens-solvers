@@ -4,13 +4,13 @@ import unittest
 import weakref
 
 class Memoized(type):
-    # this is the MultiSingleton metaclass 
+    # this is the MultiSingleton metaclass
     # with a WeakValueDictionary instead of a simple dict
     def __call__(cls, *args, **kwds):
         cache = cls.__dict__.get('__cache__')
         if cache is None:
             cls.__cache__ = cache = weakref.WeakValueDictionary()
-        
+
         obj = object.__new__(cls)
         obj.__init__(*args, **kwds)
 
