@@ -128,7 +128,6 @@ class TestState(unittest.TestCase):
         state_moved = state._move_slot("up")
         state_final = State(final)
         self.failUnlessEqual(state_moved, state_final)
-        self.failUnlessEqual(state_moved.heuristics(), 2)
 
     def testillegalmove(self):
         board = [
