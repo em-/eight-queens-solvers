@@ -40,7 +40,7 @@ class State(object):
     def __hash__(self):
         coords = self.coords[:]
         coords.sort()
-        return hash(self.size) + hash(str(coords))
+        return hash(str(self.size) + str(coords))
 
     def is_goal(self):
         empty_rows = [i for i in range(self.size) if i not in self.rows]
