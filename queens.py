@@ -4,95 +4,76 @@ import unittest
 import copy
 import memoize
 
+import sets
 
 class State(object):
     __metaclass__ = memoize.Memoized
 
-    def __init__(self, size, coords=None):
-        self.rows = {}
+    def __init__(self, size, coords=()):
+        self.coords = list(coords)
         self.size = size
-        if not coords:
-            coords = ()
-        if not self._check_valid(coords):
+
+        self.rows    = [x   for x, y in coords]
+        self.cols    = [y   for x, y in coords]
+        self.diags_a = [x-y for x, y in coords]
+        self.diags_b = [x+y for x, y in coords]
+
+        if not self._check():
             raise ValueError
-        for i,j in coords:
-            self.rows[i] = j
+
+    def _check(self):
+        def _check_uniq(list):
+            list = list[:]
+            while list:
+                i = list.pop()
+                if i in list:
+                    return False
+            return True
+
+        if not _check_uniq(self.rows): return False
+        if not _check_uniq(self.cols): return False
+        if not _check_uniq(self.diags_a): return False
+        if not _check_uniq(self.diags_b): return False
+
+        return True
 
     def __hash__(self):
-        return hash(self.size) + hash(str(self.rows))
-
-    def _check_valid(self, coords):
-        rows = [i for i,j in coords]
-        rows.sort()
-        if not self._check_unique(rows):
-            return False
-
-        cols = [j for i,j in coords]
-        cols.sort()
-        if not self._check_unique(cols):
-            return False
-
-        diags_a = [i-j for i,j in coords]
-        diags_a.sort()
-        if not self._check_unique(diags_a):
-            return False
-
-        diags_b = [i+j for i,j in coords]
-        diags_b.sort()
-        if not self._check_unique(diags_b):
-            return False
-
-        return True
-
-    def _check_unique(self, list):
-        for i in list:
-            if list.count(i) != 1:
-                return False
-        return True
-
-    def _get_empty_rows(self):
-        occupied = self.rows.keys()
-        empty = []
-        for i in range(self.size):
-            if i not in occupied:
-                empty.append(i)
-        return empty
+        coords = self.coords[:]
+        coords.sort()
+        return hash(self.size) + hash(str(coords))
 
     def is_goal(self):
-        return not self._get_empty_rows()
+        empty_rows = [i for i in range(self.size) if i not in self.rows]
+        return not empty_rows
 
     def generate(self):
         successors = []
-        coords = self.rows.items()
-        empty_rows = self._get_empty_rows()
+
+        empty_rows = [i for i in range(self.size) if i not in self.rows]
+        empty_cols = [i for i in range(self.size) if i not in self.cols]
+        
         for i in empty_rows:
-            for j in range(self.size):
-                coords.append((i,j))
+            for j in empty_cols:
                 try:
+                    coords = self.coords[:]
+                    coords.append( (i, j) )
                     s = self.__class__(self.size, coords)
                     successors.append(s)
                 except ValueError:
                     pass
-                coords.pop()
         return successors
 
     def heuristics(self):
-        coords = self.rows.items()
-        rows = [i for i,j in coords]
-        cols = [j for i,j in coords]
-        diags_a = [i-j for i,j in coords]
-        diags_b = [i+j for i,j in coords]
-
         free = 0
         for i in xrange(self.size):
             for j in xrange(self.size):
-                if i not in rows:
+                if i not in self.rows:
                     free += 1
-                if j not in cols:
+                if j not in self.cols:
                     free += 1
-                if i-j not in diags_a:
+                if i-j not in self.diags_a:
                     free += 1
-                if i+j not in diags_b:
+                if i+j not in self.diags_b:
                     free += 1
 
         return ((self.size**2)*4 - free) - 4 * self.size * len(self.rows)
@@ -101,7 +82,7 @@ class State(object):
         string = []
         for i in range(self.size):
             for j in range(self.size):
-                if self.rows.get(i) == j:
+                if (i, j) in self.coords:
                     string.append('o')
                 else:
                     string.append(' ')
@@ -118,6 +99,16 @@ class TestState(unittest.TestCase):
         )
         state = State(4, queens)
         self.failUnless(state.is_goal())
+
+    def testgoalgenerate(self):
+        queens = (
+            (0,1),
+            (1,3),
+            (2,0),
+            (3,2)
+        )
+        state = State(4, queens)
+        self.failUnless(not state.generate())
 
     def testillegal(self):
         queens = (
