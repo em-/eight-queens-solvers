@@ -63,7 +63,7 @@ class State(object):
                     pass
         return successors
 
-    def heuristics(self):
+    def old_heuristics(self):
         free = 0
         for i in xrange(self.size):
             for j in xrange(self.size):
@@ -77,6 +77,25 @@ class State(object):
                     free += 1
 
         return ((self.size**2)*4 - free) - 4 * self.size * len(self.rows)
+
+    def heuristics(self):
+        tot = 0
+        for i in xrange(self.size):
+            for j in xrange(self.size):
+                val = 0
+                if i in self.rows:
+                    val += 0.25
+                if j in self.cols:
+                    val += 0.25
+                if i-j in self.diags_a:
+                    val += 0.25
+                if i+j in self.diags_b:
+                    val += 0.25
+                tot += val
+        tot -= self.size * len(self.coords)
+        if tot*4 != self.old_heuristics():
+            raise 'heu'
+        return tot
 
     def __str__(self):
         string = []
