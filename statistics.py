@@ -94,7 +94,7 @@ class QueensDumb(Statistics):
         self.print_stat()
         self.astar (initial_state)
         self.print_stat()
-        self.pruningbreadth (initial_state, 350)
+        self.pruningbreadth (initial_state, 300)
         self.print_stat()
         for i in xrange(40, 34, -1):
             self.pruningbreadth (initial_state, i)
