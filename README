@@ -1,0 +1,57 @@
+Algoritmi di ricerca nello spazio delle soluzioni
+-------------------------------------------------
+
+In questo archivio sono contenuti alcuni algoritmi di ricerca nello spazio
+delle soluzioni, al fine di valutarne le prestazioni nel caso della 
+ricerca di soluzioni in due differenti problemi.
+
+Il risultato dell'analisi è disponibile presso l'indirizzo
+http://nerd.ocracy.org/em/ai/ricerca_soluzioni.html.
+
+La ricerca è stata fatta per il corso di "Gestione della conoscenza e 
+intelligenza artificiale" tenuto dal prof. Elio Piccolo nell'anno 2005/2006
+al Politecnico di Torino.
+
+La versione più aggiornate del codice è disponibile all'indirizzo
+http://techn.ocracy.org/ai.
+
+
+Installazione
+-------------
+
+L'unico requisito per far funzionare i programmi è la libreria per
+grafi NetworkX.
+Nel caso non fosse installata nel sistema è possibile scaricare il file
+http://optusnet.dl.sourceforge.net/sourceforge/networkx/networkx-0.30-py2.4.egg
+e spostarlo nella directory "graph".
+
+
+Contenuti
+---------
+
+* count.py conteggia il numero di stati raggiungibile per ogni problema
+
+* statistics.py esegue i test due volte, in modo che nella seconda 
+  iterazione non vi sia alcun accesso al disco che falsi le tempistiche
+
+* queens.py e slot.py contengono la definizione degli stati e le relative
+  euristiche
+
+* queens_dumb.py e slot_dumb.py ereditano da queens.py e slot.py sostituendo
+  le euristiche con le versioni meno raffinate
+
+* solvers/*.py è un modulo python contenente gli algoritmi analizzati
+
+* memoize.py è una metaclasse che fa in modo di evitare l'esistenza in 
+  memoria di stati duplicati. Non è eccessivamente complicata ma può essere 
+  tranquillamente ignorata assumendo che non esistano doppioni di stati e
+  che vangano restituiti riferimenti a stati già creati quando ce ne fosse
+  la necessità
+
+* tutto ciò che inizia con "test" è un test automatico che non è necessario 
+  al funzionamento dei programmi
+
+
+-- 
+Emanuele Aina
+http://nerd.ocracy/em/
